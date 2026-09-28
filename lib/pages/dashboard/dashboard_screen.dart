@@ -1,7 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:moneyflow/pages/local_storage.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -12,11 +10,13 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   String? username;
-  Future<void> user() async {
-    final prefs = await SharedPreferences.getInstance();
-    final name = prefs.getString('userName');
+  
+
+  void user() {
+    final name = LocalStorage.prefs.getString('userName');
+
     setState(() {
-      username = name;
+      username = name ?? 'user';
     });
   }
 
@@ -30,10 +30,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green.shade400,
+        backgroundColor:Theme.of(context).colorScheme.secondary,
         title: ListTile(
           title: Text(
-            "Good Morning , $username",
+            "Good Morning, ${username ?? '...'}",
             style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
@@ -61,8 +61,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           crossAxisAlignment: .start,
           children: [
             Container(
-              margin: EdgeInsets.all(10),
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              margin: EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.green.shade400, Colors.green.shade200],
@@ -93,7 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ],
                   ),
                   Text(
-                    "- -",
+                    " - -",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -104,7 +104,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 15),
               child: Row(
                 children: [
                   Expanded(
@@ -150,7 +150,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 10),
+            
             Center(
               child: ElevatedButton(
                 style: ButtonStyle(

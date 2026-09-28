@@ -19,6 +19,7 @@ class _HomebottomState extends State<Homebottom> {
       ),
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
+        elevation: 0,
       backgroundColor: Theme.of(context).colorScheme.primary,
         onTap: widget.onTap,
         fixedColor: Colors.white,

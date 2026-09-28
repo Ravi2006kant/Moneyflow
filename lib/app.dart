@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:moneyflow/pages/Home/home.dart';
 import 'package:moneyflow/route/route.dart';
 import 'package:moneyflow/provider/theme_provider.dart';
-import 'package:moneyflow/theme/theme.dart';
-import 'package:moneyflow/pages/intro/intro_screen.dart';
 import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {

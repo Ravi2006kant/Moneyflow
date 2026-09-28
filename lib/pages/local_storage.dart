@@ -7,6 +7,16 @@ class LocalStorage {
     prefs = await SharedPreferences.getInstance();
   }
 
+// static Future<void> setDarkMode(bool value) async {
+//     final prefs = await SharedPreferences.getInstance();
+//     await prefs.setBool('isDarkMode', value);
+//   }
+
+// static Future<bool> getDarkMode() async {
+    
+//     return prefs.getBool('isDarkMode') ?? false;
+//   }
+
   static Future<void> setIntroSeen() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -14,9 +24,9 @@ class LocalStorage {
   }
 
   static Future<bool> hasSeenIntro() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('hasSeenIntro') ?? false;
-  }
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getBool('hasSeenIntro') ?? false;
+}
 
   static Future<bool> hasUserName() async {
     final prefs = await SharedPreferences.getInstance();

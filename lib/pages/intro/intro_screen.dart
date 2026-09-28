@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moneyflow/pages/splash/splash_screen.dart';
+import 'package:moneyflow/pages/username/showDialog.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -16,14 +17,13 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 
   Future<void> _nextScreen() async {
-    
     await Future.delayed(Duration(seconds: 2));
     if (!mounted) return;
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
         builder: (context) {
-          return SplashScreen();
+          return Showdialog();
         },
       ),
     );
@@ -34,7 +34,10 @@ class _IntroScreenState extends State<IntroScreen> {
     return Scaffold(
       body: Column(
         mainAxisAlignment: .center,
-        children: [Center(child: CircleAvatar()), Text("Your Money, Your Control")],
+        children: [
+          Center(child: CircleAvatar()),
+          Text("Your Money, Your Control"),
+        ],
       ),
     );
   }

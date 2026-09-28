@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:moneyflow/theme/theme.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  
+  bool isDarkMode = false;
   ThemeData _themeData = lightmode;
 
   ThemeData get themeData => _themeData;
@@ -12,11 +12,8 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   void triger() {
-    if (_themeData == lightmode) {
-      _themeData = darkmode;
-    } else {
-      _themeData = lightmode;
-    }
-    
+    isDarkMode = !isDarkMode;
+    _themeData == lightmode ? _themeData = darkmode : _themeData = lightmode;
+    notifyListeners();
   }
 }
