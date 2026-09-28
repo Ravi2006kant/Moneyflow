@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:moneyflow/app.dart';
 import 'package:moneyflow/provider/theme_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -22,21 +21,68 @@ class _SettingState extends State<Setting> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
+            margin: EdgeInsets.all(10),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: Colors.green,
+              borderRadius: BorderRadius.circular(25),
+            ),
             height: 100,
-            color: Colors.red,
+
             child: Row(
+              mainAxisAlignment: .start,
+
               children: [
-                CircleAvatar(),
-                Column(children: [Text("Kalix"), Text("Personal Finance")]),
+                
+                CircleAvatar(radius: 45, backgroundColor: Colors.red),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 15,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: .start,
+                    mainAxisAlignment: .start,
+                    children: [
+                      Text(
+                        "Kalix",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Text(
+                        "Personal Finance",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(width: 100),
                 IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.arrow_forward_ios_rounded),
+                  icon: Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),
           ),
 
-          Text("Preferences"),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15,),
+            child: Text(
+              "Preferences",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          ListTile(title: Text("Language")),
+          ListTile(title: Text("Currency")),
           ListTile(
             title: Text("Dark Mode"),
             // trailing: Switch(
@@ -46,6 +92,25 @@ class _SettingState extends State<Setting> {
             //   },
             // ),
           ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15,),
+            child: Text(
+              "Data Management",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          ListTile(title: Text("Export Data")),
+          ListTile(title: Text("Clear Data")),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15,),
+            child: Text(
+              "App",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ),
+          ListTile(title: Text("Notifications"), trailing: Icon(Icons.arrow_forward_ios)),
+          ListTile(title: Text("About Moneyflow ")),
           ElevatedButton(
             onPressed: () {
               Provider.of<ThemeProvider>(context, listen: false).triger();
