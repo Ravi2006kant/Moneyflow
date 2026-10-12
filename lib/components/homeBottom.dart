@@ -22,15 +22,17 @@ class _HomebottomState extends State<Homebottom> {
         elevation: 0,
       backgroundColor: Theme.of(context).colorScheme.primary,
         onTap: widget.onTap,
-        fixedColor: Colors.white,
+fixedColor: Colors.white,
+iconSize: 30,
         unselectedItemColor: Colors.white,
         currentIndex: widget.ind,
+
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
           BottomNavigationBarItem(
             icon: Icon(Icons.list_rounded),
-            label: "Transaction",
+            label: "History",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.bar_chart_rounded),

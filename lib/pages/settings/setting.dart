@@ -25,10 +25,11 @@ class _SettingState extends State<Setting> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+              width: double.infinity,
               margin: EdgeInsets.all(10),
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.green,
+                color:Theme.of(context).colorScheme.inversePrimary,
                 borderRadius: BorderRadius.circular(25),
               ),
               height: 100,
@@ -40,7 +41,7 @@ class _SettingState extends State<Setting> {
                   CircleAvatar(radius: 45, backgroundColor: Colors.red),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
+                      horizontal: 5,
                       vertical: 15,
                     ),
                     child: Column(
@@ -65,7 +66,7 @@ class _SettingState extends State<Setting> {
                       ],
                     ),
                   ),
-                  SizedBox(width: 100),
+                Spacer(),
                   IconButton(
                     onPressed: () {},
                     icon: Icon(
@@ -126,7 +127,7 @@ class _SettingState extends State<Setting> {
               title: Text("Export Data"),
               trailing: Icon(Icons.arrow_forward_ios),
             ),
-            ListTile(
+            ListTile(contentPadding: EdgeInsets.symmetric(horizontal: 15),
               leading: Icon(Icons.cleaning_services_outlined),
               title: Text("Clear Data"),
               trailing: IconButton(

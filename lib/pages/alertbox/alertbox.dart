@@ -29,10 +29,12 @@ class _AlertboxState extends State<Alertbox> {
     return AlertDialog(
       backgroundColor: Theme.of(context).colorScheme.primary,
       content: Container(
-        height: 150,
-        width: 150,
+        height: 185,
+        width: 185,
         child: Column(
+          mainAxisAlignment: .spaceAround,
           children: [
+            SizedBox(height: 10),
             Text(
               "Enter You Name",
               style: TextStyle(
