@@ -21,34 +21,11 @@ class TransactionScreen extends StatelessWidget {
             length: 3,
             initialIndex: 0,
             child: TabBar(
-              // overlayColor: WidgetStatePropertyAll(Colors.red),//no use
-              // indicator: BoxDecoration(
-              //   color: Colors.red,
-              //   borderRadius: BorderRadius.circular(25),
-              // ),
-              // automaticIndicatorColorAdjustment: true,
               tabs: [
                 ClipRRect(
                   borderRadius: BorderRadiusGeometry.circular(25),
                   child: Tab(
-                    text: "All",
-                    // child: Container(
-                    //   padding: EdgeInsets.symmetric(
-                    //     horizontal: 15,
-                    //     vertical: 5,
-                    //   ),
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.green,
-                    //     borderRadius: BorderRadius.circular(25),
-                    //   ),
-                    //   child: Text(
-                    //     "Hello",
-                    //     style: TextStyle(
-                    //       color: Colors.white,
-                    //       fontWeight: FontWeight.bold,
-                    //     ),
-                    //   ),
-                    // ),
+                    child: Text("All", style: TextStyle(color: Colors.green)),
                   ),
                 ),
                 Tab(text: "Income"),
@@ -58,17 +35,25 @@ class TransactionScreen extends StatelessWidget {
           ),
 
           Row(
-            children: [DropdownButton(items: [], onChanged: (context) {})],
+            children: [
+              DropdownButton(
+                items: [DropdownMenuItem(child: Text("hel"))],
+                onChanged: (context) {},
+              ),
+            ],
           ),
 
           ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(Colors.green),
+            ),
             onPressed: () {
               Navigator.pushNamed(context, AppRoute.addtransaction);
             },
             child: Text(
-              "+ Add transaction",
+              "+ Add Transaction",
               style: TextStyle(
-                color: Colors.green,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
             ),

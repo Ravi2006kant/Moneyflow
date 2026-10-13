@@ -12,7 +12,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Money Flow',
       routes: AppRoute.routes,
-      initialRoute: AppRoute.splash,
+      initialRoute: AppRoute.addtransaction,
       theme: Provider.of<ThemeProvider>(context).themeData,
     );
   }

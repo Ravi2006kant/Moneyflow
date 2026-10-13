@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moneyflow/pages/local_storage.dart';
 import 'package:moneyflow/provider/theme_provider.dart';
+import 'package:moneyflow/route/route.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
@@ -40,39 +41,39 @@ class _SettingState extends State<Setting> {
                   CircleAvatar(radius: 45, backgroundColor: Colors.red),
                   Padding(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 15,
+                      horizontal: 5,
+                      vertical: 23,
                     ),
                     child: Column(
                       crossAxisAlignment: .start,
                       mainAxisAlignment: .start,
                       children: [
                         Text(
-                          "Kalix",
+                          "- -",
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 20,
                           ),
                         ),
-                        Text(
-                          "Personal Finance",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
+                        // Text(
+                        //   "Finance",
+                        //   style: TextStyle(
+                        //     color: Colors.white,
+                        //     fontWeight: FontWeight.w400,
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
-                  SizedBox(width: 100),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.arrow_forward_ios_rounded,
-                      color: Colors.white,
-                    ),
-                  ),
+                  // SizedBox(width: 100),
+                  // IconButton(
+                  //   onPressed: () {},
+                  //   icon: Icon(
+                  //     Icons.arrow_forward_ios_rounded,
+                  //     color: Colors.white,
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -103,15 +104,21 @@ class _SettingState extends State<Setting> {
               //   },
               // ),
             ),
-            ListTile(
-              leading: Icon(Icons.language_rounded),
-              title: Text("Language"),
-              trailing: Icon(Icons.arrow_forward_ios),
+            InkWell(
+              onTap: () => Navigator.pushNamed(context, '/language'),
+              child: ListTile(
+                leading: Icon(Icons.language_rounded),
+                title: Text("Language"),
+                trailing: Icon(Icons.arrow_forward_ios),
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.currency_exchange_rounded),
-              title: Text("Currency"),
-              trailing: Icon(Icons.arrow_forward_ios),
+            InkWell(
+              onTap: () => Navigator.pushNamed(context, '/currency'),
+              child: ListTile(
+                leading: Icon(Icons.currency_exchange_rounded),
+                title: Text("Currency"),
+                trailing: Icon(Icons.arrow_forward_ios),
+              ),
             ),
 
             Padding(
@@ -121,10 +128,13 @@ class _SettingState extends State<Setting> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
             ),
-            ListTile(
-              leading: Icon(Icons.share_rounded),
-              title: Text("Export Data"),
-              trailing: Icon(Icons.arrow_forward_ios),
+            InkWell(
+              onTap: () => Navigator.pushNamed(context, '/export'),
+              child: ListTile(
+                leading: Icon(Icons.share_rounded),
+                title: Text("Export Data"),
+                trailing: Icon(Icons.arrow_forward_ios),
+              ),
             ),
             ListTile(
               leading: Icon(Icons.cleaning_services_outlined),
@@ -142,14 +152,20 @@ class _SettingState extends State<Setting> {
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Text("App", style: TextStyle(fontWeight: FontWeight.bold)),
             ),
-            ListTile(
-              leading: Icon(Icons.notifications_active),
-              title: Text("Notifications"),
-              trailing: Icon(Icons.arrow_forward_ios),
+            InkWell(
+              onTap: () => Navigator.pushNamed(context, '/notification'),
+              child: ListTile(
+                leading: Icon(Icons.notifications_active),
+                title: Text("Notifications"),
+                trailing: Icon(Icons.arrow_forward_ios),
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.info),
-              title: Text("About Moneyflow "),
+            InkWell(
+              onTap: () => Navigator.pushNamed(context, '/about'),
+              child: ListTile(
+                leading: Icon(Icons.info),
+                title: Text("About Moneyflow "),
+              ),
             ),
           ],
         ),
