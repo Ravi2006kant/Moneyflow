@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moneyflow/pages/balance/balance.dart';
 import 'package:moneyflow/pages/local_storage.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -9,8 +10,9 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  // static int _balance = 0;
   String? username;
-  
+  static const currencySymbol = "\$";
 
   void user() {
     final name = LocalStorage.prefs.getString('userName');
@@ -30,7 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         title: ListTile(
           title: Text(
             "Good Morning, ${username ?? '...'}",
@@ -88,12 +90,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       IconButton(
                         icon: Icon(Icons.refresh_rounded, color: Colors.white),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {});
+                        },
                       ),
                     ],
                   ),
                   Text(
-                    " - -",
+                    currencySymbol + " " + Balance.getbalance().toString(),
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -103,8 +107,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
             ),
+
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               child: Row(
                 children: [
                   Expanded(
@@ -122,7 +127,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             "Income",
                             style: TextStyle(fontSize: 17, fontWeight: .bold),
                           ),
-                          Text("\$ - -"),
+                          Text(
+                            currencySymbol +
+                                " " +
+                                Balance.getIncome().toString(),
+                          ),
                         ],
                       ),
                     ),
@@ -142,7 +151,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             "Expense",
                             style: TextStyle(fontSize: 17, fontWeight: .bold),
                           ),
-                          Text("\$ - -"),
+                          Text(
+                            currencySymbol +
+                                " " +
+                                (Balance.getExpense().toString()),
+                          ),
                         ],
                       ),
                     ),
@@ -150,7 +163,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ],
               ),
             ),
-            
+
             Center(
               child: ElevatedButton(
                 style: ButtonStyle(
@@ -175,6 +188,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
             ),
+
             Expanded(
               child: ListView.builder(
                 itemCount: 15,
