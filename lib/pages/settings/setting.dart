@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moneyflow/pages/local_storage.dart';
+import 'package:moneyflow/pages/username/showDialog.dart';
 import 'package:moneyflow/provider/theme_provider.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
@@ -151,6 +152,9 @@ class _SettingState extends State<Setting> {
             ListTile(
               leading: Icon(Icons.info),
               title: Text("About Moneyflow "),
+              trailing: IconButton(onPressed: (){
+                Navigator.push(context,MaterialPageRoute(builder: ((context) => Showdialog())) );
+              }, icon: Icon(Icons.arrow_forward_ios_rounded)),
             ),
           ],
         ),
