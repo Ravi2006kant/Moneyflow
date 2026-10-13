@@ -42,7 +42,7 @@ class AppRoute {
     report: (_) => ReportScreen(),
     setting: (_) => Setting(),
     addtransaction: (_) => AddTransaction(),
-    transactiondetail: (_) => TransactionDetail(),
+    // transactiondetail: (_) => TransactionDetail(),
     about: (_) => AboutScreen(),
     export: (context) => ExportData(),
     notification: (context) => NotificationScreen(),

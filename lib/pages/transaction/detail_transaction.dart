@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 
 class TransactionDetail extends StatefulWidget {
-  const TransactionDetail({super.key});
+   TransactionDetail({super.key,required this.amount,this.note,this.category});
+   String amount;
+   String? note;
+   String? category;
+   DateTime? date;
 
   @override
   State<TransactionDetail> createState() => _TransactionDetailState();
 }
 
 class _TransactionDetailState extends State<TransactionDetail> {
-  final balancein = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    Future<DateTime?> datenow;
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -20,33 +23,9 @@ class _TransactionDetailState extends State<TransactionDetail> {
       ),
       body: Column(
         children: [
-          Row(
-            mainAxisAlignment: .center,
-            children: [
-              SegmentedButton(
-                multiSelectionEnabled: true,
-                showSelectedIcon: true,
-                segments: [
-                  ButtonSegment(
-                    value: 'income',
-                    label: Text("Income"),
-                    enabled: true,
-                  ),
-                  ButtonSegment(value: 'expense', label: Text("Expense")),
-                ],
-                selected: {TextSelectionHandleType.collapsed},
-                onSelectionChanged: (value) {
-                  // setState(() {
-                  //   selectedType = value.first;
-                  // });
-                },
-              ),
-            ],
-          ),
-          SizedBox(height: 10),
 
           TextField(
-            controller: balancein,
+
             keyboardType: .number,
             autocorrect: true,
             cursorColor: Colors.green,
@@ -54,7 +33,9 @@ class _TransactionDetailState extends State<TransactionDetail> {
             obscureText: false,
             style: TextStyle(fontSize: 25),
             decoration: InputDecoration(
-              hintText: "\$ 0",
+              hintText:"\$ ${widget.amount}",
+hintStyle: TextStyle(color: Colors.white,fontWeight: .bold),
+filled: false,
               border: OutlineInputBorder(borderSide: .none),
             ),
           ),
@@ -97,11 +78,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
               suffixIcon: IconButton(
                 icon: Icon(Icons.calendar_month_outlined),
                 onPressed: () {
-                  datenow = showDatePicker(
-                    context: context,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime.now(),
-                  );
+
                 },
               ),
 
@@ -114,19 +91,31 @@ class _TransactionDetailState extends State<TransactionDetail> {
             endIndent: 10,
             color: Theme.of(context).colorScheme.primary,
           ),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(Colors.green),
-            ),
-            onPressed: () {},
-            child: Text("Edit", style: TextStyle(color: Colors.white)),
-          ),
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: WidgetStatePropertyAll(Colors.red),
-            ),
-            onPressed: () {},
-            child: Text("Delete", style: TextStyle(color: Colors.white)),
+          SizedBox(height: 20,),
+
+          Row(
+            mainAxisAlignment: .spaceEvenly,
+            children: [
+              ElevatedButton(
+                style: ButtonStyle(fixedSize: WidgetStatePropertyAll(Size.fromWidth(130)),
+                  backgroundColor: WidgetStatePropertyAll(Colors.green),
+                ),
+                onPressed: () {
+
+                },
+                child: Text("Edit", style: TextStyle(color: Colors.white,fontWeight: .bold)),
+              ),
+
+              ElevatedButton(
+                style: ButtonStyle(fixedSize: WidgetStatePropertyAll(Size.fromWidth(130)),
+                  backgroundColor: WidgetStatePropertyAll(Colors.red),
+                ),
+                onPressed: () {
+
+                },
+                child: Text("Delete", style: TextStyle(color: Colors.white,fontWeight: .bold)),
+              ),
+            ],
           ),
         ],
       ),
