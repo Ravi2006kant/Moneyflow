@@ -1,46 +1,42 @@
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorage {
   static late SharedPreferences prefs;
 
+  // Initialize SharedPreferences once at startup.
   static Future<void> init() async {
     prefs = await SharedPreferences.getInstance();
   }
 
-// static Future<void> setDarkMode(bool value) async {
-//     final prefs = await SharedPreferences.getInstance();
-//     await prefs.setBool('isDarkMode', value);
-//   }
+  // Dark mode.
+  static Future<bool> getDarkMode() async {
+    return prefs.getBool('isDarkMode') ?? false;
+  }
 
-// static Future<bool> getDarkMode() async {
-    
-//     return prefs.getBool('isDarkMode') ?? false;
-//   }
+  static Future<void> setDarkMode(bool value) async {
+    await prefs.setBool('isDarkMode', value);
+  }
 
+  // Onboarding.
   static Future<void> setIntroSeen() async {
-    final prefs = await SharedPreferences.getInstance();
-
     await prefs.setBool('hasSeenIntro', true);
   }
 
   static Future<bool> hasSeenIntro() async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getBool('hasSeenIntro') ?? false;
-}
+    return prefs.getBool('hasSeenIntro') ?? false;
+  }
 
+  // Username.
   static Future<bool> hasUserName() async {
-    final prefs = await SharedPreferences.getInstance();
-
     return prefs.containsKey('userName');
   }
 
   static Future<void> saveUserName(String name) async {
-    final prefs = await SharedPreferences.getInstance();
     await prefs.setString('userName', name);
   }
 
   static Future<String?> getUserName() async {
-    final prefs = await SharedPreferences.getInstance();
     return prefs.getString('userName');
   }
 }

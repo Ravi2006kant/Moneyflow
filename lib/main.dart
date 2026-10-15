@@ -1,15 +1,27 @@
+
 import 'package:flutter/material.dart';
 import 'package:moneyflow/app.dart';
 import 'package:moneyflow/pages/local_storage.dart';
 import 'package:moneyflow/provider/theme_provider.dart';
+import 'package:moneyflow/provider/transactionProvider.dart';
 import 'package:provider/provider.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await LocalStorage.init();
+
+  final savedTheme = await LocalStorage.getDarkMode();
+
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeProvider(),
+    MultiProvider(
+      providers: [ChangeNotifierProvider(
+        create: (_) => ThemeProvider(
+          initialTheme: savedTheme,
+        ),
+
+
+      ),ChangeNotifierProvider(create: (_)=> TransactionProvider())],
       child: const App(),
     ),
   );

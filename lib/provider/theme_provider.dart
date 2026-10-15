@@ -1,33 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:moneyflow/pages/local_storage.dart';
 import 'package:moneyflow/theme/theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  bool isDarkMode = false;
-  ThemeData _themeData = lightmode;
+  bool isDarkMode;
+  late ThemeData _themeData;
 
-  Future<void> savetheme() async {
-    final prefs = await SharedPreferences.getInstance();
-    isDarkMode = prefs.getBool('isdarkmode') ?? false;
+  ThemeProvider({required bool initialTheme})
+      : isDarkMode = initialTheme {
+    _themeData = isDarkMode ? darkmode : lightmode;
   }
 
-  ThemeData get themeData {
-    return isDarkMode ? darkmode : lightmode;
-  }
+  ThemeData get themeData => _themeData;
 
-  set themeData(ThemeData themeData) {
-    _themeData = themeData;
-    notifyListeners();
-  }
+  Future<void> trigger() async {
+    final bool newMode = !isDarkMode;
 
-  //button
-  Future<void> triger() async {
-    isDarkMode = !isDarkMode;
-    final pref = await SharedPreferences.getInstance();
+    // Save the new preference.
+    await LocalStorage.setDarkMode(newMode);
 
-    await pref.setBool('isdarkmode', isDarkMode);
+    // Update the current state.
+    isDarkMode = newMode;
+    _themeData = isDarkMode ? darkmode : lightmode;
 
-    _themeData == lightmode ? _themeData = darkmode : _themeData = lightmode;
+    // Notify listening widgets.
     notifyListeners();
   }
 }

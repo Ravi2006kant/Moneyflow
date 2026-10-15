@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:moneyflow/database/dbHelper.dart';
 
 class TransactionDetail extends StatefulWidget {
-   TransactionDetail({super.key,required this.amount,this.note,this.category});
+   TransactionDetail({super.key,required this.newid,required this.amount,this.note,this.category});
    String amount;
    String? note;
+   int newid;
    String? category;
    DateTime? date;
 
@@ -25,7 +27,6 @@ class _TransactionDetailState extends State<TransactionDetail> {
         children: [
 
           TextField(
-
             keyboardType: .number,
             autocorrect: true,
             cursorColor: Colors.green,
@@ -33,8 +34,8 @@ class _TransactionDetailState extends State<TransactionDetail> {
             obscureText: false,
             style: TextStyle(fontSize: 25),
             decoration: InputDecoration(
-              hintText:"\$ ${widget.amount}",
-hintStyle: TextStyle(color: Colors.white,fontWeight: .bold),
+              hintText:"\₹ ${widget.amount}",
+hintStyle: TextStyle(fontWeight: .bold),
 filled: false,
               border: OutlineInputBorder(borderSide: .none),
             ),
@@ -46,7 +47,9 @@ filled: false,
             obscureText: false,
 
             decoration: InputDecoration(
-              hintText: "Note",
+              hintText: widget.note == null || widget.note!.isEmpty
+                  ? "Notes"
+                  : widget.note,
               border: OutlineInputBorder(borderSide: .none, gapPadding: 0),
             ),
           ),
@@ -58,8 +61,12 @@ filled: false,
           ),
           TextField(
             keyboardType: .name,
+
+
             decoration: InputDecoration(
-              hintText: "Category",
+              hintText: widget.note == null || widget.note!.isEmpty
+                  ? "Category"
+                  : widget.category,
 
               border: OutlineInputBorder(borderSide: .none, gapPadding: 0),
             ),
@@ -101,7 +108,7 @@ filled: false,
                   backgroundColor: WidgetStatePropertyAll(Colors.green),
                 ),
                 onPressed: () {
-
+Navigator.pop(context);
                 },
                 child: Text("Edit", style: TextStyle(color: Colors.white,fontWeight: .bold)),
               ),
@@ -111,7 +118,9 @@ filled: false,
                   backgroundColor: WidgetStatePropertyAll(Colors.red),
                 ),
                 onPressed: () {
-
+Dbhelper.getInstance().deleteNote(id:widget.newid );
+Navigator.pop(context);
+Navigator.pop(context);
                 },
                 child: Text("Delete", style: TextStyle(color: Colors.white,fontWeight: .bold)),
               ),

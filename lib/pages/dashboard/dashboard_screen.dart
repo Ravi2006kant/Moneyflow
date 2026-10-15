@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:moneyflow/database/dbHelper.dart';
 import 'package:moneyflow/pages/balance/balance.dart';
+import 'package:moneyflow/pages/dashboard/floatingAddButton.dart';
 import 'package:moneyflow/pages/local_storage.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -10,9 +12,14 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  // static int _balance = 0;
+
   String? username;
   static const currencySymbol = "\$";
+
+  Future<double> balance() async{
+ final income = Dbhelper.getInstance().getTotal('income');
+    return income;
+  }
 
   void user() {
     final name = LocalStorage.prefs.getString('userName');
@@ -97,7 +104,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ],
                   ),
                   Text(
-                    currencySymbol + " " + Balance.getbalance().toString(),
+                    currencySymbol + " " ,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
@@ -129,8 +136,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           Text(
                             currencySymbol +
-                                " " +
-                                Balance.getIncome().toString(),
+                                " "
+                                // Balance.getIncome().toString(),
                           ),
                         ],
                       ),
@@ -153,8 +160,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                           Text(
                             currencySymbol +
-                                " " +
-                                (Balance.getExpense().toString()),
+                                " "
+
                           ),
                         ],
                       ),
@@ -164,25 +171,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
 
-            Center(
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                    Colors.green.shade400,
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/addtransaction');
-                },
-                child: Text(
-                  "Add Transaction",
-                  style: TextStyle(color: Colors.white, fontWeight: .bold),
-                ),
-              ),
-            ),
 
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Text(
                 "Recent Transaction",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
@@ -200,6 +191,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
       ),
+      floatingActionButton: Floatingaddbutton(),
     );
   }
 }

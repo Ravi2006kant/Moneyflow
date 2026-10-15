@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:moneyflow/pages/balance/balance.dart';
+import 'package:moneyflow/database/dbHelper.dart';
 import 'package:moneyflow/pages/transaction/detail_transaction.dart';
-import 'package:moneyflow/route/route.dart';
+import 'package:moneyflow/provider/transactionProvider.dart';
+import 'package:provider/provider.dart';
 
 class AddTransaction extends StatefulWidget {
   const AddTransaction({super.key});
-
   @override
   State<AddTransaction> createState() => _AddTransactionState();
 }
 
 class _AddTransactionState extends State<AddTransaction> {
   final balancein = TextEditingController();
+  final notesCont = TextEditingController();
+  final categoryController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    Future<DateTime?> datenow;
+    Future<DateTime?> datenow ;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -36,34 +38,31 @@ class _AddTransactionState extends State<AddTransaction> {
               obscureText: false,
               style: TextStyle(fontSize: 25),
               decoration: InputDecoration(
-                hintText: "\$ 0",
+                hintText: "\₹ 0",
                 border: OutlineInputBorder(borderSide: .none),
               ),
             ),
         
             TextField(
+              controller: notesCont,
               keyboardType: .name,
               autocorrect: true,
               obscureText: false,
-        
               decoration: InputDecoration(
                 hintText: "Note",
-        
                 border: OutlineInputBorder(borderSide: .none, gapPadding: 0),
-                // border: OutlineInputBorder(
-                //   borderSide: BorderSide(
-                //     strokeAlign: BorderSide.strokeAlignOutside,
-                //   ),
-                // ),
               ),
             ),
+
             Divider(
               height: 1,
               indent: 10,
               endIndent: 10,
               color: Theme.of(context).colorScheme.primary,
             ),
+
             TextField(
+              controller: categoryController,
               keyboardType: .name,
               decoration: InputDecoration(
                 hintText: "Category",
@@ -84,7 +83,11 @@ class _AddTransactionState extends State<AddTransaction> {
                 hintText: "Date",
                 suffixIcon: IconButton(
                   icon: Icon(Icons.calendar_month_outlined),
+
                   onPressed: () {
+
+
+
                     datenow = showDatePicker(
                       context: context,
                       firstDate: DateTime.now(),
@@ -112,9 +115,13 @@ class _AddTransactionState extends State<AddTransaction> {
                     backgroundColor: WidgetStatePropertyAll(Colors.green),
                   ),
                   onPressed: () {
-                    Balance.addIncome(int.parse(balancein.text));
-        Navigator.push(context, MaterialPageRoute(builder: (context) =>TransactionDetail(amount: balancein.text,)));
-                    Navigator.pushNamed(context, AppRoute.transactiondetail);
+                    if(  balancein.text == "" || balancein.text.toString() == "0"){
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text("Please enter amount") ));
+                    }else{
+                      Dbhelper.getInstance().addNote(note: notesCont.text,category: categoryController.text,amount: balancein.text, type: "Income");
+
+                      Navigator.push(context, MaterialPageRoute(builder: (context) =>TransactionDetail(newid: 23,note: notesCont.text,category: categoryController.text,amount: balancein.text,)));
+                    }
                   },
                   child: Text("Income", style: TextStyle(color: Colors.white,fontWeight: .bold)),
                 ),
@@ -124,14 +131,35 @@ class _AddTransactionState extends State<AddTransaction> {
                     backgroundColor: WidgetStatePropertyAll(Colors.red),
                   ),
                   onPressed: () {
-                    Balance.addExpense(int.parse(balancein.text));
-        
-                    Navigator.pushNamed(context, AppRoute.transactiondetail);
-                  },
+if(  balancein.text == "" || balancein.text.toString() == "0"){
+ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:Text("Please enter amount") ));
+}else {
+  Dbhelper.getInstance().addNote(note: notesCont.text,
+      category: categoryController.text,
+      amount: balancein.text,
+      type: "Expense");
+  Navigator.push(
+      context, MaterialPageRoute(builder: (context) =>
+      TransactionDetail(
+        newid: 35,
+    note: notesCont.text,
+    category: categoryController.text,
+    amount: balancein.text,)));
+} },
                   child: Text("Expense", style: TextStyle(color: Colors.white,fontWeight: .bold)),
                 ),
-              ],
-            ),
+              ],),
+            // ElevatedButton(
+            //   style: ButtonStyle(fixedSize: WidgetStatePropertyAll(Size.fromWidth(130)),
+            //     backgroundColor: WidgetStatePropertyAll(Colors.yellow),
+            //   ),
+            //   onPressed: () {
+            //
+            //     Dbhelper.getInstance().viewAllNotes();
+            //     context.read<TransactionProvider>().loadTransactions();
+            //   },
+            //   child: Text("view", style: TextStyle(color: Colors.white,fontWeight: .bold)),
+            // ),
           ],
         ),
       ),

@@ -1,83 +1,163 @@
+
 import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
 class Dbhelper {
-  //singleton - we can only access the db from one instance
   Dbhelper._();
-  static Dbhelper getInstance() => Dbhelper._();
 
-  // Database ? cause it can be null for the first time user
+  static final Dbhelper _instance = Dbhelper._();
+  static Dbhelper getInstance() => _instance;
+
+  static const String dbName = 'money_flow.db';
+  static const String tablename = 'tracker';
+  static const String id = 'id';
+  static const String notes = 'notes';
+  static const String category = 'category';
+  static const String amount = 'amount';
+  static const String date = 'date';
+  static const String type = 'type';
+
+  final now = DateTime.now();
   Database? mDb;
 
-  static const String dbName = "money_flow.db";
-  static const String tablename = "transaction";
-  static const String id = "id";
-  static const String notes = "notes";
-  static const String category = "category";
-  static const String amount = "amount";
-  static const String date = "date";
-  static const String type = "type";
-
-  //init database
+  // Initialize database
   Future<Database> initdb() async {
-    //if(mbd ==null){
-    // openDb(); }
     mDb ??= await opendb();
     return mDb!;
   }
 
-  //open database
+  // Create/open database
   Future<Database> opendb() async {
-    Directory appDir = await getApplicationDocumentsDirectory();
-    String dbPath = join(appDir.path, dbName);
-    return await openDatabase(
+    final Directory appDir =
+    await getApplicationDocumentsDirectory();
+
+    final String dbPath = join(appDir.path, dbName);
+
+    return openDatabase(
       dbPath,
-      version: 1, //will change when changing the scheme/column
-      onCreate: (db, _) {
-        //help to execute and create tables
-        db.execute(
-          "create table $tablename ( $id integer primary key autoincrement,$notes text,$category text ,$date text,$amount integer ,$type text)",
-        );
+      version: 2,
+      onCreate: (db, version) async {
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS $tablename (
+            $id INTEGER PRIMARY KEY AUTOINCREMENT,
+            $notes TEXT,
+            $category TEXT,
+            $date TEXT,
+            $amount REAL,
+            $type TEXT
+          )
+        ''');
+      },
+      onUpgrade: (db, oldVersion, newVersion) async {
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS $tablename (
+            $id INTEGER PRIMARY KEY AUTOINCREMENT,
+            $notes TEXT,
+            $category TEXT,
+            $date TEXT,
+            $amount REAL,
+            $type TEXT
+          )
+        ''');
       },
     );
   }
 
-  //adding notes
-  void addNote({
-    required String title,
-    required String desc,
-    required String category,
+  // Add note
+  Future<void> addNote({
+    String? note,
+    String? category,
     required String amount,
     required String type,
   }) async {
-    Database db = await initdb();
-    db.insert(tablename, {
-      notes: title,
-      category: category,
-      amount: amount,
-      type: type,
-      date: DateTime.now().millisecondsSinceEpoch.toString(),
+    final db = await initdb();
+    final formattedDate =
+    DateFormat('dd-MM-yyyy HH:mm:ss').format(now);
+    await db.insert(tablename, {
+      notes: note,
+      Dbhelper.category: category,
+      Dbhelper.amount: double.tryParse(amount) ?? 0.0,
+      Dbhelper.type: type,
+      date: formattedDate,
     });
   }
 
-  //fetch notes
+  // Fetch all notes
   Future<List<Map<String, dynamic>>> getallNotes() async {
-    Database db = await initdb();
-    return await db.query(tablename);
+    final db = await initdb();
+    return db.query(tablename, orderBy: '$id DESC');
   }
 
-  //update notes
-  void updateNote({required int id}) async{
-Database db = await initdb();
-db.update(tablename,{
+  // Update note
+  Future<int> updateNote({
+    required int id,
+    String? note,
+    String? category,
+    String? amount,
+    String? type,
+  }) async {
+    final db = await initdb();
 
-},where: "$notes = $id");
+    final Map<String, dynamic> values = {};
 
+    if (note != null) values[notes] = note;
+    if (category != null) values[Dbhelper.category] = category;
+    if (amount != null) {
+      values[Dbhelper.amount] = double.tryParse(amount) ?? 0.0;
+    }
+    if (type != null) values[Dbhelper.type] = type;
+
+    if (values.isEmpty) return 0;
+
+    return db.update(
+      tablename,
+      values,
+      where: '$id = ?',
+      whereArgs: [id],
+    );
   }
-  //delete notes
-  void deleteNote({required int id}) {
 
+  // Delete one note
+  Future<int> deleteNote({required int id}) async {
+    final db = await initdb();
+
+    return db.delete(
+      tablename,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
+
+  // Delete all rows (table remains)
+  Future<void> allDeleteNote() async {
+    final db = await initdb();
+    await db.delete(tablename);
+    print('All tracker records deleted');
+  }
+
+  // Calculate total by type
+  Future<double> getTotal(String type) async {
+    final db = await initdb();
+
+    final result = await db.rawQuery(
+      'SELECT SUM(amount) AS total FROM $tablename WHERE type = ?',
+      [type],
+    );
+
+    return (result.first['total'] as num?)?.toDouble() ?? 0.0;
+  }
+
+  // Print all notes in Debug Console
+
+  Future<List<Map<String, Object?>>> viewAllNotes() async {
+    final db = await initdb();
+    final records = await db.query(tablename ,orderBy: '$id desc');
+    return records;
+  }
+
+  //returning a list of map
+
 }
