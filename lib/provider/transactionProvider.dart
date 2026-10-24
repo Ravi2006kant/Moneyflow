@@ -6,8 +6,7 @@ class TransactionProvider extends ChangeNotifier {
 
   Future<void> loadTransactions() async {
     transactions = await Dbhelper.getInstance().viewAllNotes();
-   print("provider");
-    print( transactions);
+
     notifyListeners();
   }
 }

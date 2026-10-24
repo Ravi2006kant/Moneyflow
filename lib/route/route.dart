@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:moneyflow/pages/Home/home.dart';
+import 'package:moneyflow/pages/budget/addbudget.dart';
 import 'package:moneyflow/pages/settings/about_screen.dart';
 import 'package:moneyflow/pages/budget/budget_screen.dart';
 import 'package:moneyflow/pages/intro/intro_screen.dart';
@@ -31,6 +32,7 @@ class AppRoute {
   static const export = '/export';
   static const notification = '/notification';
   static const about = '/about';
+  static const addbudget = '/addbudget';
 
   static Map<String, WidgetBuilder> routes = {
     username: (_) => Showdialog(),
@@ -48,5 +50,6 @@ class AppRoute {
     notification: (context) => NotificationScreen(),
     language: (context) => LanguageScreen(),
     currency: (context) => CurrencyScreen(),
+    addbudget:(context) =>Addbudget()
   };
 }

@@ -15,6 +15,21 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
+  String? username;
+  void user() {
+    final name = LocalStorage.prefs.getString('userName');
+
+    setState(() {
+      username = name ?? 'User';
+    });
+  }
+
+  @override
+  void initState() {
+    user();
+    // TODO: implement initState
+    super.initState();
+  }
 
   void deletedb() async {
     final records = await Dbhelper.getInstance().getallNotes();
@@ -22,6 +37,7 @@ class _SettingState extends State<Setting> {
       debugPrint(record.toString());
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +54,7 @@ class _SettingState extends State<Setting> {
               margin: EdgeInsets.all(10),
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color:Theme.of(context).colorScheme.inversePrimary,
+                color: Theme.of(context).colorScheme.inversePrimary,
                 borderRadius: BorderRadius.circular(25),
               ),
               height: 100,
@@ -58,7 +74,7 @@ class _SettingState extends State<Setting> {
                       mainAxisAlignment: .start,
                       children: [
                         Text(
-                          "Kalix",
+                          username!,
                           style: TextStyle(
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -107,8 +123,6 @@ class _SettingState extends State<Setting> {
                   });
                 },
               ),
-
-
             ),
             ListTile(
               leading: Icon(Icons.language_rounded),
@@ -133,13 +147,16 @@ class _SettingState extends State<Setting> {
               title: Text("Export Data"),
               trailing: Icon(Icons.arrow_forward_ios),
             ),
-            ListTile(contentPadding: EdgeInsets.symmetric(horizontal: 15),
+            ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 15),
               leading: Icon(Icons.cleaning_services_outlined),
               title: Text("Clear Data"),
               trailing: IconButton(
                 onPressed: () {
                   setState(() {
                     LocalStorage.prefs.clear();
+                    Dbhelper.getInstance().allDeleteNote();
+                    Dbhelper.getInstance().deleteAllBudget();
                   });
                 },
                 icon: Icon(Icons.delete, color: Colors.red),
@@ -152,14 +169,22 @@ class _SettingState extends State<Setting> {
             ListTile(
               leading: Icon(Icons.notifications_active),
               title: Text("Notifications"),
-              trailing: Icon(Icons.arrow_forward_ios),
+              trailing: IconButton(onPressed: (){Navigator.pushNamed(context, '/notification');}, icon: Icon(Icons.arrow_forward_ios)),
             ),
-            ListTile(
-              leading: Icon(Icons.info),
-              title: Text("About Moneyflow "),
-              trailing: IconButton(onPressed: (){
-Dbhelper.getInstance().allDeleteNote();
-                }, icon: Icon(Icons.delete_forever)),
+            InkWell(
+              onTap: () {
+                Navigator.pushNamed(context, '/about');
+              },
+              child: ListTile(
+                leading: Icon(Icons.info),
+                title: Row(
+                  children: [
+                    Text("About"),
+                    SizedBox(width: 5),
+                    Text("Moneyflow", style: TextStyle(fontWeight: .bold)),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -167,7 +192,6 @@ Dbhelper.getInstance().allDeleteNote();
     );
   }
 }
-
 
 /*
 You already have a habit of “let me picture how this should work in my head first” — that’s actually a strength (you did it with your carousel tool, your investment blueprint). But for brand new syntax, your brain has nothing to picture yet. So it stalls. That’s not you being slow — that’s a mismatch between your learning style and how the topic was presented.

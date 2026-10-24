@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:moneyflow/provider/transactionProvider.dart';
 import 'package:moneyflow/route/route.dart';
@@ -8,8 +7,7 @@ class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
 
   @override
-  State<TransactionScreen> createState() =>
-      _TransactionScreenState();
+  State<TransactionScreen> createState() => _TransactionScreenState();
 }
 
 class _TransactionScreenState extends State<TransactionScreen> {
@@ -21,12 +19,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
   }
 
   Widget buildTransactionList(
-      List<Map<String, Object?>> transactions,
-      String filter,
-      ) {
+    List<Map<String, Object?>> transactions,
+    String filter,
+  ) {
     final filteredTransactions = transactions.where((transaction) {
-      final type =
-      (transaction['type'] ?? '').toString().toLowerCase();
+      final type = (transaction['type'] ?? '').toString().toLowerCase();
 
       if (filter == 'income') {
         return type == 'income';
@@ -40,9 +37,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
     }).toList();
 
     if (filteredTransactions.isEmpty) {
-      return const Center(
-        child: Text('No transactions found'),
-      );
+      return const Center(child: Text('No transactions found'));
     }
 
     return ListView.builder(
@@ -50,47 +45,35 @@ class _TransactionScreenState extends State<TransactionScreen> {
       itemBuilder: (context, index) {
         final transaction = filteredTransactions[index];
 
-        final title =
-        (transaction['notes'] ?? 'Transaction').toString();
+        final title = (transaction['notes'] ?? 'Transaction').toString();
 
-        final category =
-        (transaction['category'] ?? 'Other').toString();
+        final category = (transaction['category'] ?? 'Other').toString();
 
         final amount = transaction['amount'] ?? 0;
 
-        final type =
-        (transaction['type'] ?? '').toString().toLowerCase();
+        final type = (transaction['type'] ?? '').toString().toLowerCase();
 
         final isIncome = type == 'income';
 
         final date = (transaction['date'] ?? '').toString();
 
         return Card(
-          margin: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 5,
-          ),
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: isIncome
                   ? Colors.green.withValues(alpha: 0.12)
                   : Colors.red.withValues(alpha: 0.12),
               child: Icon(
-                isIncome
-                    ? Icons.arrow_upward
-                    : Icons.arrow_downward,
+                isIncome ? Icons.arrow_upward : Icons.arrow_downward,
                 color: isIncome ? Colors.green : Colors.red,
               ),
             ),
             title: Text(
-              title == "" ? "Transaction":title ,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+              title == "" ? "Transaction" : title,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            subtitle: Text(
-              date.isEmpty ? category : '$category • $date',
-            ),
+            subtitle: Text(date.isEmpty ? category : '$category • $date'),
             trailing: Text(
               '${isIncome ? '+' : '-'}₹$amount',
               style: TextStyle(
@@ -119,16 +102,17 @@ class _TransactionScreenState extends State<TransactionScreen> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.search),
-            ),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
             IconButton(
               onPressed: () {},
               icon: const Icon(Icons.filter_alt_outlined),
             ),
           ],
-          bottom: const TabBar(indicatorColor: Colors.green,labelColor: Colors.green,
+          bottom: const TabBar(
+            indicatorColor: Colors.green,
+            labelColor: Colors.green,
+            labelStyle: TextStyle(fontWeight: .bold, fontSize: 17),
+            unselectedLabelStyle: TextStyle(fontWeight: .w500, fontSize: 15),
             tabs: [
               Tab(text: 'All'),
               Tab(text: 'Income'),
@@ -147,8 +131,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 ],
               ),
             ),
-
-
           ],
         ),
       ),

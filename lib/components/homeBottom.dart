@@ -16,17 +16,17 @@ class _HomebottomState extends State<Homebottom> {
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(25),
         topRight: Radius.circular(25),
+
       ),
       child: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         elevation: 0,
-      backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         onTap: widget.onTap,
-fixedColor: Colors.white,
-iconSize: 30,
+        fixedColor: Colors.white,
+        iconSize: 27,
         unselectedItemColor: Colors.white,
         currentIndex: widget.ind,
-
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
@@ -35,7 +35,7 @@ iconSize: 30,
             label: "History",
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_rounded),
+            icon: Icon(Icons.account_balance_wallet_rounded),
             label: "Budget",
           ),
           BottomNavigationBarItem(

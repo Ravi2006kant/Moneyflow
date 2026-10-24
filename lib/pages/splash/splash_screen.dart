@@ -3,6 +3,8 @@ import 'package:moneyflow/pages/Home/home.dart';
 import 'package:moneyflow/pages/intro/intro_screen.dart';
 import 'package:moneyflow/pages/local_storage.dart';
 
+import '../../route/route.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -17,31 +19,21 @@ class _SplashScreenState extends State<SplashScreen> {
     _nextScreen();
   }
 
+
   Future<void> _nextScreen() async {
-    final introscreen = await LocalStorage.hasSeenIntro();
-    await Future.delayed(Duration(seconds: 3));
+    final introScreen = await LocalStorage.hasSeenIntro();
+
+    await Future.delayed(const Duration(seconds: 2));
 
     if (!mounted) return;
-   if (introscreen) {
-  // Intro HAS been seen → Home
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (context) => Home(),
-    ),
-  );
-} else {
-  // Intro has NOT been seen → Intro
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (context) => IntroScreen(),
-    ),
-  );
-}
 
-    // Navigator.pop(context);
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      introScreen ? AppRoute.home : AppRoute.intro,
+          (route) => false,
+    );
   }
+
 
   @override
   Widget build(BuildContext context) {

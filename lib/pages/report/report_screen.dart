@@ -1,4 +1,7 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:moneyflow/components/expensePieChart.dart';
+import 'package:moneyflow/pages/report/calculator.dart';
 
 class ReportScreen extends StatelessWidget {
   const ReportScreen({super.key});
@@ -12,16 +15,18 @@ class ReportScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          DropdownButton(
-            
-            items: [
-              DropdownMenuItem(child: Text("month")),
-              
-            ],
-            onChanged: (context) {},
-          ),
+          ExpensePieChart()
+          // DropdownButton(
+          //
+          //   items: [
+          //     DropdownMenuItem(child: Text("month")),
+          //
+          //   ],
+          //   onChanged: (context) {},
+          // ),
         ],
       ),
+
     );
   }
 }

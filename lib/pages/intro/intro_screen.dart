@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:moneyflow/pages/splash/splash_screen.dart';
 import 'package:moneyflow/pages/username/showDialog.dart';
 
+import '../local_storage.dart';
+
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
 
@@ -17,6 +19,9 @@ class _IntroScreenState extends State<IntroScreen> {
   }
 
   Future<void> _nextScreen() async {
+
+    final introscreen = await  LocalStorage.setIntroSeen();
+
     await Future.delayed(Duration(seconds: 2));
     if (!mounted) return;
     Navigator.pushReplacement(

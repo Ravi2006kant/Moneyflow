@@ -27,10 +27,11 @@ class _AlertboxState extends State<Alertbox> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Colors.green,
       content: Container(
         height: 185,
         width: 185,
+        color: Colors.green,
         child: Column(
           mainAxisAlignment: .spaceAround,
           children: [
@@ -49,7 +50,7 @@ class _AlertboxState extends State<Alertbox> {
 
               controller: txtController,
               enabled: true,
-              style: TextStyle(fontWeight: .bold),
+              style: TextStyle(color: Colors.black,fontWeight: .bold),
               decoration: InputDecoration(
                 fillColor: Colors.white,
                 filled: true,
@@ -67,17 +68,19 @@ class _AlertboxState extends State<Alertbox> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                input();
-                Navigator.pop(context);
+              style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.white)),
+              onPressed: () async {
+                await input();
 
-                Navigator.pushReplacement(
+                if (!context.mounted) return;
+
+                Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => Home()),
+                  MaterialPageRoute(builder: (_) => Home()),
+                      (route) => false,
                 );
-                Navigator.pop(context);
               },
-              child: Text("Save", style: TextStyle(fontWeight: .bold)),
+              child: Text("Save", style: TextStyle(color: Colors.green,fontWeight: .bold)),
             ),
           ],
         ),

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:moneyflow/route/route.dart';
 import 'package:moneyflow/provider/theme_provider.dart';
@@ -16,7 +15,7 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Money Flow',
       routes: AppRoute.routes,
-      initialRoute: AppRoute.addtransaction,
+      initialRoute: AppRoute.splash,
       theme: lightmode,
       darkTheme: darkmode,
       themeMode: themeProvider.isDarkMode

@@ -1,4 +1,3 @@
-
 import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
@@ -30,38 +29,52 @@ class Dbhelper {
   }
 
   // Create/open database
-  Future<Database> opendb() async {
-    final Directory appDir =
-    await getApplicationDocumentsDirectory();
 
+  Future<Database> opendb() async {
+    final Directory appDir = await getApplicationDocumentsDirectory();
     final String dbPath = join(appDir.path, dbName);
 
     return openDatabase(
       dbPath,
-      version: 2,
+      version: 3,
+
       onCreate: (db, version) async {
         await db.execute('''
-          CREATE TABLE IF NOT EXISTS $tablename (
-            $id INTEGER PRIMARY KEY AUTOINCREMENT,
-            $notes TEXT,
-            $category TEXT,
-            $date TEXT,
-            $amount REAL,
-            $type TEXT
-          )
-        ''');
-      },
-      onUpgrade: (db, oldVersion, newVersion) async {
+        CREATE TABLE IF NOT EXISTS tracker (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          notes TEXT,
+          category TEXT,
+          date TEXT,
+          amount REAL,
+          type TEXT
+        )
+      ''');
+
         await db.execute('''
-          CREATE TABLE IF NOT EXISTS $tablename (
-            $id INTEGER PRIMARY KEY AUTOINCREMENT,
-            $notes TEXT,
-            $category TEXT,
-            $date TEXT,
-            $amount REAL,
-            $type TEXT
+        CREATE TABLE IF NOT EXISTS budget (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          budgetName TEXT NOT NULL,
+          category TEXT NOT NULL,
+          spendingLimit REAL NOT NULL,
+          month TEXT NOT NULL,
+          alert INTEGER
+        )
+      ''');
+      },
+
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 3) {
+          await db.execute('''
+          CREATE TABLE IF NOT EXISTS budget (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            budgetName TEXT NOT NULL,
+            category TEXT NOT NULL,
+            spendingLimit REAL NOT NULL,
+            month TEXT NOT NULL,
+            alert INTEGER
           )
         ''');
+        }
       },
     );
   }
@@ -74,8 +87,7 @@ class Dbhelper {
     required String type,
   }) async {
     final db = await initdb();
-    final formattedDate =
-    DateFormat('dd-MM-yyyy HH:mm:ss').format(now);
+    final formattedDate = DateFormat('dd-MM-yyyy HH:mm:ss').format(now);
     await db.insert(tablename, {
       notes: note,
       Dbhelper.category: category,
@@ -112,23 +124,14 @@ class Dbhelper {
 
     if (values.isEmpty) return 0;
 
-    return db.update(
-      tablename,
-      values,
-      where: '$id = ?',
-      whereArgs: [id],
-    );
+    return db.update(tablename, values, where: '$id = ?', whereArgs: [id]);
   }
 
   // Delete one note
   Future<int> deleteNote({required int id}) async {
     final db = await initdb();
 
-    return db.delete(
-      tablename,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    return db.delete(tablename, where: 'id = ?', whereArgs: [id]);
   }
 
   // Delete all rows (table remains)
@@ -151,13 +154,65 @@ class Dbhelper {
   }
 
   // Print all notes in Debug Console
-
   Future<List<Map<String, Object?>>> viewAllNotes() async {
     final db = await initdb();
-    final records = await db.query(tablename ,orderBy: '$id desc');
+    final records = await db.query(tablename, orderBy: '$id desc');
     return records;
   }
 
-  //returning a list of map
+  //Budget
+  Future<void> addbudget(
+    int alert, {
+    required String budgetName,
+    required String category,
+    required double spendingLimit,
+    required String month,
+  }) async {
+    final db = await initdb();
 
+    final data = await db.insert('budget', {
+      'budgetName': budgetName,
+      "category": category,
+      "spendingLimit": spendingLimit,
+      "month": month,
+      "alert": alert,
+    });
+  }
+
+  Future<double> getTotalBudgetForMonth(String month) async {
+    final db = await initdb();
+
+    final result = await db.rawQuery(
+      '''
+    SELECT COALESCE(SUM(spendinglimit), 0) AS total
+    FROM budget
+    WHERE month = ?
+    ''',
+      [month],
+    );
+    print(result);
+    return (result.first['total'] as num).toDouble();
+  }
+
+  Future<List<Map<String, Object?>>> fetchbudgetCatefory() async {
+    final db = await initdb();
+    final rows = await db.query('budget',where: '');
+    return rows;
+  }
+
+  Future<List<Map<String, Object?>>> fetchBudget() async {
+    final db = await initdb();
+    final rows = await db.query('budget',orderBy: '$id desc');
+    return rows;
+  }
+
+  Future<void> deleteAllBudget() async {
+    final db = await initdb();
+    db.delete('budget');
+  }
+
+  Future<void> deleteBudget(int delId) async {
+    final db = await initdb();
+    db.delete('budget', where: 'id = ?', whereArgs: [delId]);
+  }
 }
