@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:moneyflow/database/dbHelper.dart';
 import 'package:moneyflow/pages/transaction/detail_transaction.dart';
-
 
 class AddTransaction extends StatefulWidget {
   const AddTransaction({super.key});
@@ -261,6 +261,9 @@ class _AddTransactionState extends State<AddTransaction> {
                         category: categoryController.text,
                         amount: balancein.text,
                         type: "Income",
+                        dateinput: DateFormat('yyyy-MM-dd').format(
+                          selectedDate ?? DateTime.now(),
+                        ),
                       );
 
                       Navigator.push(
@@ -270,7 +273,7 @@ class _AddTransactionState extends State<AddTransaction> {
                             newid: 23,
                             note: notesCont.text,
                             category: categoryController.text,
-                            amount: balancein.text,
+                            amount: balancein.text,date: selectedDate,
                           ),
                         ),
                       );
@@ -298,6 +301,9 @@ class _AddTransactionState extends State<AddTransaction> {
                         note: notesCont.text,
                         category: categoryController.text,
                         amount: balancein.text,
+                        dateinput: DateFormat('yyyy-MM-dd').format(
+                          selectedDate ?? DateTime.now(),
+                        ),
                         type: "Expense",
                       );
                       Navigator.push(
@@ -308,6 +314,7 @@ class _AddTransactionState extends State<AddTransaction> {
                             note: notesCont.text,
                             category: categoryController.text,
                             amount: balancein.text,
+                            date: selectedDate,
                           ),
                         ),
                       );

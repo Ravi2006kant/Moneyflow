@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:moneyflow/database/dbHelper.dart';
 import 'package:moneyflow/provider/budgetprovider.dart';
@@ -75,9 +74,6 @@ class _BudgetScreenState extends State<BudgetScreen> {
       return isSelectedMonth(budget['month']);
     }).toList();
 
-    // Uses a stored 'spent' value if your provider supplies one.
-    // For accurate spending, this must come from monthly expense
-    // transactions, not merely from the budget record.
     final spent = selectedBudgets.fold<double>(
       0,
           (sum, budget) => sum + toDouble(budget['spent']),
@@ -92,7 +88,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
         centerTitle: true,
       ),
 
-      body: RefreshIndicator(
+      body: RefreshIndicator.adaptive(
         onRefresh: refreshData,
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
@@ -446,6 +442,7 @@ class _BudgetScreenState extends State<BudgetScreen> {
       ),
 
       floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: Colors.green,
         onPressed: () async {
           await Navigator.pushNamed(context, '/addbudget');
 
@@ -453,8 +450,8 @@ class _BudgetScreenState extends State<BudgetScreen> {
 
           await refreshData();
         },
-        icon: const Icon(Icons.add_rounded),
-        label: const Text('Add Budget'),
+        icon: const Icon(Icons.add_rounded,color: Colors.white),
+        label: const Text('Add Budget',style: TextStyle(color: Colors.white,fontWeight: .bold),),
       ),
     );
   }
