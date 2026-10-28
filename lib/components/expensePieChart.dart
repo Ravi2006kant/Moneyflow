@@ -12,10 +12,10 @@ class ExpensePieChart extends StatelessWidget {
   });
 
   static const Map<String, Color> categoryColors = {
-    'food': Colors.green,
+    'food': Colors.amber,
     'travel': Colors.blue,
-    'shopping': Colors.orange,
-    'bills': Colors.purple,
+    'shopping': Colors.purpleAccent,
+    'bills': Colors.redAccent,
     'other': Colors.grey,
   };
 

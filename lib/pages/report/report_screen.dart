@@ -42,19 +42,16 @@ class _ReportScreenState extends State<ReportScreen> {
   DateTime selectedMonth = DateTime.now();
 
   String get monthKey => DateFormat('yyyy-MM').format(selectedMonth);
-Future<List<Map<String,dynamic>>> fetchBreakdown() async{
-  final result = await Dbhelper.getInstance().getTransactionsByCategories();
-  print(result);
- return result;
-
-}
+  Future<List<Map<String, dynamic>>> fetchBreakdown() async {
+    final result = await Dbhelper.getInstance().getTransactionsByCategories();
+    print(result);
+    return result;
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-
   }
 
   @override
@@ -137,44 +134,97 @@ Future<List<Map<String,dynamic>>> fetchBreakdown() async{
               ],
             ),
 
-            // Financial summary
-            Container(
-              height: 120,
-              width: 300,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.green,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Net Saving'),
-                  const SizedBox(height: 6),
-                  Text(
-                    NumberFormat.currency(
-                      locale: 'en_IN',
-                      symbol: '₹',
-                      decimalDigits: 2,
-                    ).format(totalBalance),
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Text('Income: ₹${income.toStringAsFixed(2)}'),
-                      Text('Expense: ₹${expenses.toStringAsFixed(2)}'),
-                    ],
-                  ),
-                ],
-              ),
-            ),
 
-            const SizedBox(height: 24),
+      Container(
+      width: 320,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).brightness == Brightness.dark
+            ?  Colors.grey.shade800
+            : Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Theme.of(context).brightness == Brightness.dark
+              ? Colors.white12
+              : Colors.grey.shade200,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(
+              alpha: Theme.of(context).brightness == Brightness.dark
+                  ? 0.15
+                  : 0.06,
+            ),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Net Saving',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          Text(
+            NumberFormat.currency(
+              locale: 'en_IN',
+              symbol: '₹',
+              decimalDigits: 2,
+            ).format(totalBalance),
+            style: TextStyle(
+              fontSize: 26,
+              fontWeight: FontWeight.bold,
+              color: totalBalance >= 0
+                  ? Colors.green.shade600
+                  : Colors.red.shade600,
+            ),
+          ),
+
+          const SizedBox(height: 10),
+
+          Divider(
+            color: Theme.of(context).dividerColor,
+            height: 1,
+          ),
+
+          const SizedBox(height: 16),
+
+          Row(
+            children: [
+              Expanded(
+                child: _buildAmountItem(
+                  icon: Icons.arrow_upward_rounded,
+                  label: 'Income',
+                  amount: income,
+                  color: Colors.green,
+                ),
+              ),
+
+              const SizedBox(width: 12),
+
+              Expanded(
+                child: _buildAmountItem(
+                  icon: Icons.arrow_downward_rounded,
+                  label: 'Expenses',
+                  amount: expenses,
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+
 
             // Expense breakdown
             Container(
@@ -187,43 +237,88 @@ Future<List<Map<String,dynamic>>> fetchBreakdown() async{
                     'Expense Breakdown',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(height: 12),
+
 
                   // This widget must use the selected month's data
                   // if it is expected to update with the selector.
-                  ExpensePieChart(
-                    month: monthKey,
-                  ),
+                  ExpensePieChart(month: monthKey),
                 ],
               ),
             ),
 
-            const SizedBox(height: 24),
 
-            const Padding(
-              padding: EdgeInsets.all(16),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Monthly Trend Bar Charts',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
+
+            // const Padding(
+            //   padding: EdgeInsets.all(16),
+            //   child: Align(
+            //     alignment: Alignment.centerLeft,
+            //     child: Text(
+            //       'Monthly Trend Bar Charts',
+            //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final db = Dbhelper.getInstance();
-          fetchBreakdown();
 
-          final incomeTotal = await db.getTotalByMonth('income', monthKey);
+    );
 
-          final expenseTotal = await db.getTotalByMonth('expense', monthKey);
-        },
-        child: const Icon(Icons.calculate),
+  }
+  Widget _buildAmountItem({
+    required IconData icon,
+    required String label,
+    required double amount,
+    required Color color,
+  }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: isDark ? 0.15 : 0.08),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: color, size: 18),
+              const SizedBox(width: 6),
+              Flexible(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 8),
+
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              NumberFormat.currency(
+                locale: 'en_IN',
+                symbol: '₹',
+                decimalDigits: 2,
+              ).format(amount),
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
+
 }
