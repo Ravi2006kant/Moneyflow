@@ -294,8 +294,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             : Colors.red.withValues(alpha: 0.12),
                         child: Icon(
                           isIncome
-                              ? Icons.arrow_downward
-                              : Icons.arrow_upward,
+                              ? Icons.arrow_upward
+                              : Icons.arrow_downward,
                           color: isIncome
                               ? Colors.green
                               : Colors.red,

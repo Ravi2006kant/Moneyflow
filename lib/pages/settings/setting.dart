@@ -167,6 +167,7 @@ class _SettingState extends State<Setting> {
               child: Text("App", style: TextStyle(fontWeight: FontWeight.bold)),
             ),
             ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 15),
               leading: Icon(Icons.notifications_active),
               title: Text("Notifications"),
               trailing: IconButton(onPressed: (){Navigator.pushNamed(context, '/notification');}, icon: Icon(Icons.arrow_forward_ios)),

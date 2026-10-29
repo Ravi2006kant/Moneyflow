@@ -50,7 +50,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
             height: 42,
             width: 42,
             decoration: BoxDecoration(
-              color: theme.colorScheme.primaryContainer,
+              color: Colors.green,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(
@@ -111,7 +111,7 @@ class _TransactionDetailState extends State<TransactionDetail> {
                   vertical: 30,
                 ),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.primaryContainer,
+                  color: Colors.green,
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: Column(
